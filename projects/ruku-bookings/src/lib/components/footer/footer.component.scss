@@ -1,0 +1,16 @@
+.footer {
+  background: var(--color-dark);
+  color: #cbd5e1;
+  width: 100%;
+}
+
+.footer-bottom {
+  background: rgba(0, 0, 0, 0.2);
+  color: #64748b;
+  text-align: center;
+  padding: 18px 10px 10px 10px;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

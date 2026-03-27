@@ -1,0 +1,160 @@
+// Start Add Availability Section
+
+.availability-manager-card {
+  max-width: 700px;
+  width: 100%;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+
+  .loading-spinner {
+    text-align: center;
+  }
+}
+
+// Override card height for availability manager
+::ng-deep .horizontal-card-list-navigation .card {
+  height: auto !important;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+::ng-deep .horizontal-card-list-navigation .card mat-card-content {
+  flex: 1;
+  overflow: visible;
+}
+
+mat-card {
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  background-color: var(--color-surface);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+mat-card-title {
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+  margin: 20px;
+  color: var(--color-text);
+}
+
+.mat-card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 12px 0;
+  font-size: 18px;
+  border-radius: var(--radius-sm);
+}
+
+mat-card-content {
+  .separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 15px;
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+  .separator::before,
+  .separator::after {
+    content: "";
+    flex: 1;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .separator:not(:empty)::before {
+    margin-right: 0.25em;
+  }
+
+  .separator:not(:empty)::after {
+    margin-left: 0.25em;
+  }
+}
+
+.submitted-list {
+  margin-top: 32px;
+}
+
+mat-list-item {
+  background: var(--color-primary-50);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  padding: 12px 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 8px;
+  margin: 1rem 1rem;
+
+  .services-label {
+    font-size: 14px;
+  }
+
+  // Stronger selector for Angular Material buttons
+  button,
+  .mat-raised-button,
+  ::ng-deep .mat-raised-button {
+    font-size: 12px !important;
+    min-width: 0 !important;
+    padding: 8px 4px !important;
+  }
+
+  button.selected {
+    background-color: var(--color-primary) !important;
+    color: #fff !important;
+  }
+}
+
+.timeslot-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 8px;
+  margin: 1rem 1rem;
+
+  // Stronger selector for Angular Material buttons
+  button,
+  .mat-raised-button,
+  ::ng-deep .mat-raised-button {
+    font-size: 12px !important;
+    min-width: 0 !important;
+    padding: 4px 0 !important;
+  }
+
+  button.selected {
+    background-color: var(--color-primary) !important;
+    color: #fff !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .availability-manager-container {
+    padding: 12px;
+  }
+  h2 {
+    font-size: 1.3rem;
+  }
+}

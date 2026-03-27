@@ -1,0 +1,125 @@
+<div class="main-container">
+  <div class="title-section" *ngIf="availabilities && availabilities.length > 0">
+    <h1>Manage Availabilities</h1>
+  </div>
+
+  <app-horizontal-card-list
+  [items]="availabilities"
+  [itemsPerPage]="2"
+  [contentTemplate]="availabilityContentTemplate"
+  [getImageUrl]="getAvailabilityImageUrl"
+  [getTitle]="getAvailabilityTitle"
+  [showImage]="false"
+  [showActions]="canManage"
+  (edit)="editAvailability($event)"
+  (delete)="deleteAvailability($event)">
+</app-horizontal-card-list>
+
+<ng-template #availabilityContentTemplate let-availability>
+  <!-- Availability content information -->
+  <p><strong>Start Date:</strong> {{ availability.StartDate | date:'mediumDate' }}</p>
+  <p><strong>End Date:</strong> {{ availability.EndDate | date:'mediumDate' }}</p>
+  <p><strong>Timeslots:</strong> {{ availability.Timeslots.join(', ') }}</p>
+  <p><strong>Services:</strong> {{ availability.Services.join(', ') }}</p>
+</ng-template>
+
+  <div class="content">
+    <div class="title-section">
+      <h1>Add Availability</h1>
+    </div>
+    <mat-card class="availability-manager-card">
+      <!-- Loading Spinner -->
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+
+      <mat-card-content>
+        <form [formGroup]="availabilityForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Start Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="startPicker"
+              formControlName="StartDate"
+              required
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="startPicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+            <mat-error
+              *ngIf="availabilityForm.get('StartDate')?.hasError('required')"
+              >Start date is required</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>End Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="endPicker"
+              formControlName="EndDate"
+              required
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="endPicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+            <mat-error
+              *ngIf="availabilityForm.get('EndDate')?.hasError('required')"
+              >End date is required</mat-error
+            >
+          </mat-form-field>
+
+          <!-- Services Grid -->
+          <mat-label>Services*</mat-label>
+          <div class="services-grid">
+            <button
+              mat-raised-button
+              *ngFor="let service of allServices"
+              [color]="isServiceSelected(service.Title) ? 'primary' : ''"
+              (click)="toggleService(service.Title)"
+              [class.selected]="isServiceSelected(service.Title)"
+              type="button"
+            >
+              {{ service.Title }}
+            </button>
+          </div>
+          <mat-error *ngIf="availabilityForm.get('Services')?.hasError('required')">
+            At least one service is required
+          </mat-error>
+
+          <!-- Timeslot Grid -->
+          <mat-label>Timeslots*</mat-label>
+          <div class="timeslot-grid">
+            <button
+              mat-raised-button
+              *ngFor="let slot of allTimeslots"
+              [color]="isSelected(slot) ? 'primary' : ''"
+              (click)="toggleTimeslot(slot)"
+              [class.selected]="isSelected(slot)"
+              type="button"
+            >
+              {{ slot }}
+            </button>
+          </div>
+          <mat-error *ngIf="availabilityForm.get('Timeslots')?.hasError('required')">
+            At least one timeslot is required
+          </mat-error>
+
+          <!-- Submit Button -->
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="availabilityForm.invalid"
+          >
+            {{ formbuttonText }}
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

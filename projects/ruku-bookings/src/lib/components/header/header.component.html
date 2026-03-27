@@ -1,0 +1,42 @@
+<!-- Hamburger Button (visible on mobile) -->
+<button class="hamburger" [class.open]="isMenuOpen" (click)="toggleMenu()" aria-label="Toggle menu">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+<!-- Mobile Nav -->
+<nav class="mobile-nav" [class.open]="isMenuOpen">
+  <div class="mobile-branding">
+    <a routerLink="/" (click)="closeMenu()">
+      <img [src]="logoUrl" [alt]="brandTitle" class="logo" />
+    </a>
+  </div>
+  <ul class="mobile-menu">
+    <li *ngFor="let item of navItems">
+      <a *ngIf="isVisible(item)" [routerLink]="item.route" routerLinkActive="active" (click)="closeMenu()">{{ item.label }}</a>
+    </li>
+    <li *ngIf="isLoggedIn"><a (click)="logout()">Sign Out</a></li>
+  </ul>
+</nav>
+
+<!-- Desktop Nav -->
+<div class="desktop-nav">
+  <div class="company-branding">
+    <a routerLink="/">
+      <div class="branding-content">
+        <img [src]="logoUrl" [alt]="brandTitle" class="logo" />
+        <span class="title">{{ brandTitle }}</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="nav-menu">
+    <ul>
+      <li *ngFor="let item of navItems">
+        <a *ngIf="isVisible(item)" [routerLink]="item.route" routerLinkActive="active">{{ item.label }}</a>
+      </li>
+      <li *ngIf="isLoggedIn"><a class="logout-link" (click)="logout()">Sign Out</a></li>
+    </ul>
+  </div>
+</div>

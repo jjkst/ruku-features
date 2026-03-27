@@ -1,0 +1,135 @@
+<div class="main-container">
+  <div class="title-section" *ngIf="scheduledAppointments && scheduledAppointments.length > 0">
+    <h1>Manage Schedules</h1>
+  </div>
+
+  <app-horizontal-card-list
+    [items]="scheduledAppointments"
+    [itemsPerPage]="3"
+    [contentTemplate]="scheduleContentTemplate"
+    [getImageUrl]="getScheduleImageUrl"
+    [getTitle]="getScheduleTitle"
+    [showImage]="false"
+    [showActions]="canManage"
+    (edit)="editSchedule($event)"
+    (delete)="deleteSchedule($event)">
+  </app-horizontal-card-list>
+
+  <ng-template #scheduleContentTemplate let-schedule>
+    <!-- Schedule content information -->
+    <p><strong>Services: </strong> {{ schedule.Services.join(', ') }}</p>
+    <p><strong>Selected Timeslots: </strong> {{ schedule.Timeslots.join(', ') }}</p>
+    <p *ngIf="schedule.Note"><strong>Note:</strong> {{ schedule.Note }}</p>
+  </ng-template>
+
+  <div class="title-section">
+    <h1>Add Your Schedule</h1>
+  </div>
+
+  <div class="add-schedule-section">
+    <mat-card class="schedule-manager-card">
+      <!-- Loading Spinner -->
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+
+      <mat-card-content>
+        <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+          <!-- Contact Name Input -->
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Contact Name</mat-label>
+            <input
+              matInput
+              formControlName="ContactName"
+              placeholder="Enter contact name"
+            />
+            <mat-error
+              *ngIf="appointmentForm.get('ContactName')?.hasError('required')"
+            >
+              Contact name is required
+            </mat-error>
+          </mat-form-field>
+          
+          <!-- Date Picker -->
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Choose a date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="SelectedDate"
+              [matDatepickerFilter]="dateFilter"
+            />
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error
+              *ngIf="appointmentForm.get('SelectedDate')?.hasError('required')"
+            >
+              Date is required
+            </mat-error>
+          </mat-form-field>
+
+        <!-- Services Grid -->
+        <mat-label>Services*</mat-label>
+        <div class="services-grid">
+            <button
+              mat-raised-button
+              *ngFor="let service of availableServices"
+              [color]="isServiceSelected(service) ? 'primary' : ''"
+              (click)="toggleService(service)"
+              [class.selected]="isServiceSelected(service)"
+              type="button"
+            >
+              {{ service }}
+            </button>
+        </div>
+        <mat-error *ngIf="appointmentForm.get('Services')?.hasError('required') && (appointmentForm.get('Services')?.touched || appointmentForm.get('Services')?.dirty || submitted)">
+          At least one service is required
+        </mat-error>
+
+        <!-- Timeslot Grid -->
+        <mat-label>Timeslots*</mat-label>
+        <div class="timeslot-grid">
+          <button
+            mat-raised-button
+            *ngFor="let slot of availableTimeSlots"
+            [color]="isSlotSelected(slot) ? 'primary' : ''"
+            (click)="toggleTimeslot(slot)"
+            [class.selected]="isSlotSelected(slot)"
+            type="button"
+          >
+            {{ slot }}
+          </button>
+        </div>
+        <mat-error *ngIf="appointmentForm.get('Timeslots')?.hasError('required')&& (appointmentForm.get('Timeslots')?.touched || appointmentForm.get('Timeslots')?.dirty || submitted)">
+          At least one timeslot is required
+        </mat-error>
+
+          <!-- Note Input -->
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Note (Optional)</mat-label>
+            <textarea
+              matInput
+              formControlName="Note"
+              placeholder="Enter any additional notes"
+              rows="3"
+            ></textarea>
+          </mat-form-field>
+
+          <!-- Submit Button -->
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="appointmentForm.invalid"
+          >
+            {{ formbuttonText }}
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

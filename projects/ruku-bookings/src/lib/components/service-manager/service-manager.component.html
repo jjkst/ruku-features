@@ -1,0 +1,225 @@
+<div class="main-container">
+  <div class="title-section" *ngIf="services && services.length > 0">
+    <h1>Manage Product/Service</h1>
+  </div>
+
+  <app-horizontal-card-list
+    [items]="services"
+    [itemsPerPage]="3"
+    [contentTemplate]="serviceContentTemplate"
+    [getImageUrl]="getServiceImageUrl"
+    [getTitle]="getServiceTitle"
+    [showImage]="true"
+    [showActions]="canManage"
+    (edit)="editService($event)"
+    (delete)="deleteService($event)"
+  >
+  </app-horizontal-card-list>
+
+  <ng-template #serviceContentTemplate let-service> </ng-template>
+
+  <div class="title-section">
+    <h1>Add Product/Service</h1>
+  </div>
+
+  <div class="add-service-section">
+    <mat-card class="service-manager-card">
+      <!-- Loading Spinner -->
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+
+      <mat-card-content>
+        <form [formGroup]="serviceForm" (ngSubmit)="onSubmit()">
+          <!-- Title Input -->
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Title</mat-label>
+            <input
+              matInput
+              formControlName="title"
+              placeholder="Enter service title"
+            />
+            <mat-error
+              *ngIf="serviceForm.controls['title'].hasError('required')"
+            >
+              Title is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Choose a image to represent your service</mat-label>
+            <input
+              matInput
+              [value]="fileName"
+              placeholder="No file chosen"
+              readonly
+              (click)="fileInput.click()"
+            />
+            <input
+              type="file"
+              #fileInput
+              hidden
+              (change)="onFileSelected($event)"
+            />
+          </mat-form-field>
+          
+          <!-- Description Input -->
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              formControlName="description"
+              placeholder="Enter service description"
+            ></textarea>
+            <mat-error
+              *ngIf="serviceForm.controls['description'].hasError('required')"
+            >
+              Description is required
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Features Input -->
+          <div class="features-section">
+            <label class="section-label">Features</label>
+            <div formArrayName="features">
+              <div
+                *ngFor="let featureCtrl of features.controls; let i = index"
+                class="feature-row"
+              >
+                <mat-form-field appearance="fill" class="feature-field">
+                  <mat-label>Feature {{ i + 1 }}</mat-label>
+                  <input
+                    matInput
+                    [formControlName]="i"
+                    placeholder="Enter feature"
+                  />
+                </mat-form-field>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  type="button"
+                  (click)="removeFeature(i)"
+                  aria-label="Remove feature"
+                >
+                  <mat-icon>remove_circle</mat-icon>
+                </button>
+              </div>
+              <button
+                mat-raised-button
+                color="accent"
+                type="button"
+                (click)="addFeature()"
+              >
+                <mat-icon>add</mat-icon> Add Feature
+              </button>
+            </div>
+          </div>
+
+
+
+          <!-- Pricing Plans Input -->
+          <div class="pricing-plans-section">
+            <label class="section-label">Pricing Plans</label>
+            <div formArrayName="pricingPlans">
+              <div
+                *ngFor="let planGroup of pricingPlans.controls; let pi = index"
+                [formGroupName]="pi"
+                class="plan-card-form"
+              >
+                <mat-card>
+                  <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>Plan Name</mat-label>
+                    <input
+                      matInput
+                      formControlName="name"
+                      placeholder="Plan name"
+                    />
+                  </mat-form-field>
+                  <div class="plan-fields">
+                    <mat-form-field appearance="fill" class="plan-field">
+                      <mat-label>Initial Setup Fee</mat-label>
+                      <input
+                        matInput
+                        formControlName="initialSetupFee"
+                        placeholder="e.g. $1,000 (One-time)"
+                      />
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" class="plan-field">
+                      <mat-label>Monthly Subscription</mat-label>
+                      <input
+                        matInput
+                        formControlName="monthlySubscription"
+                        placeholder="e.g. $99/month"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <div formArrayName="features" class="plan-features">
+                    <div
+                      *ngFor="let pfCtrl of getPlanFeatures(planGroup).controls; let fi = index"
+                      class="plan-feature-row"
+                    >
+                      <mat-form-field
+                        appearance="fill"
+                        class="plan-feature-field"
+                      >
+                        <mat-label>Feature {{ fi + 1 }}</mat-label>
+                        <input
+                          matInput
+                          [formControlName]="fi"
+                          placeholder="Enter plan feature"
+                        />
+                      </mat-form-field>
+                      <button
+                        mat-icon-button
+                        color="warn"
+                        type="button"
+                        (click)="getPlanFeatures(planGroup).removeAt(fi)"
+                        aria-label="Remove plan feature"
+                      >
+                        <mat-icon>remove_circle</mat-icon>
+                      </button>
+                    </div>
+                    <button
+                      mat-raised-button
+                      color="accent"
+                      type="button"
+                      (click)="getPlanFeatures(planGroup).push(fb.control(''))"
+                    >
+                      <mat-icon>add</mat-icon> Add Plan Feature
+                    </button>
+                  </div>
+                  <button
+                    mat-raised-button
+                    color="warn"
+                    type="button"
+                    (click)="removePricingPlan(pi)"
+                  >
+                    <mat-icon>delete</mat-icon> Remove Plan
+                  </button>
+                </mat-card>
+              </div>
+              <button
+                mat-raised-button
+                color="accent"
+                type="button"
+                (click)="addPricingPlan()"
+              >
+                <mat-icon>add</mat-icon> Add Pricing Plan
+              </button>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="serviceForm.invalid"
+          >
+            {{ formbuttonText }}
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
