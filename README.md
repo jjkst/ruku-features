@@ -80,3 +80,7 @@ Both are added under `projects/` and registered in `angular.json` automatically.
 
 - **RukuServiceApi** at `http://localhost:5002/api`
 - JWT authentication with role-based authorization
+
+## Deployment
+
+This project does not have its own Dockerfile. For production deployment, the **[jk-portfolio-deploy](https://github.com/jjkst/jk-portfolio-deploy)** project builds the `ruku-bookings` library from this workspace and feeds it into the jk-portfolio build automatically using a multi-stage Docker build.
