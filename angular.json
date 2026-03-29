@@ -36,7 +36,7 @@
         }
       }
     },
-    "frontend-angular": {
+    "ruku-features": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -51,7 +51,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "preserveSymlinks": true,
-            "outputPath": "dist/frontend-angular",
+            "outputPath": "dist/ruku-features",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -99,10 +99,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "frontend-angular:build:production"
+              "buildTarget": "ruku-features:build:production"
             },
             "development": {
-              "buildTarget": "frontend-angular:build:development"
+              "buildTarget": "ruku-features:build:development"
             }
           },
           "defaultConfiguration": "development"

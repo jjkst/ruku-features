@@ -1,11 +1,11 @@
 {
-  "name": "frontend-angular",
-  "version": "0.0.0",
+  "name": "ruku-features",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng build ruku-bookings && ng serve frontend-angular",
+    "start": "ng build ruku-bookings && ng serve ruku-features",
     "build": "ng build ruku-bookings",
-    "build:app": "ng build ruku-bookings && ng build frontend-angular",
+    "build:app": "ng build ruku-bookings && ng build ruku-features",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

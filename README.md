@@ -5,7 +5,7 @@ Angular 19 multi-project workspace that hosts shared libraries and a standalone 
 ## Workspace Structure
 
 ```
-frontend-angular/
+ruku-features/
 ├── src/                        # Main application (shell that consumes libraries)
 │   └── app/
 │       ├── app.component.ts    # Root component (Header + RouterOutlet + Footer)
@@ -18,7 +18,7 @@ frontend-angular/
 │           └── public-api.ts   # Library public exports
 ├── dist/                       # Build output
 │   ├── ruku-bookings/          # Built library (consumed by other apps)
-│   └── frontend-angular/       # Built application
+│   └── ruku-features/       # Built application
 ├── angular.json                # Workspace config (all projects registered here)
 ├── tsconfig.json               # Base TS config (paths: ruku-bookings -> dist/)
 ├── tsconfig.app.json           # App-specific TS config (extends base)
@@ -39,7 +39,7 @@ Shared library providing booking/scheduling functionality:
 - **Models**: Service, Availability, Schedule
 - **Shared**: MaterialModule
 
-### frontend-angular (application)
+### ruku-features (application)
 
 Standalone app at the workspace root (`src/`) that imports from `ruku-bookings` to run the library independently. Routes: `/login`, `/features/*`.
 
@@ -73,7 +73,7 @@ Both are added under `projects/` and registered in `angular.json` automatically.
    ```json
    "ruku-bookings": "file:lib/ruku-bookings"
    ```
-3. Create a junction/symlink: `lib/ruku-bookings` -> `path/to/frontend-angular/dist/ruku-bookings`
+3. Create a junction/symlink: `lib/ruku-bookings` -> `path/to/ruku-features/dist/ruku-bookings`
 4. Import in code: `import { HeaderComponent, AuthService } from 'ruku-bookings';`
 
 ## Connected Backend
