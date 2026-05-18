@@ -85,14 +85,14 @@ export class ScheduleManagerComponent extends BaseComponent implements OnInit, O
       const response = await this.scheduleService.getSchedules();
       if (response.status === 200 && Array.isArray(response.body)) {
         this.scheduledAppointments =
-          response.body.map((schedule) => ({
-            Id: schedule.Id,
-            ContactName: schedule.ContactName,
-            SelectedDate: schedule.SelectedDate,
-            Services: schedule.Services,
-            Timeslots: schedule.Timeslots,
-            Uid: schedule.Uid,
-            Note: schedule.Note,
+          response.body.map((schedule: any) => ({
+            Id: schedule.id ?? schedule.Id,
+            ContactName: schedule.contactName ?? schedule.ContactName,
+            SelectedDate: schedule.selectedDate ?? schedule.SelectedDate,
+            Services: schedule.services ?? schedule.Services,
+            Timeslots: schedule.timeslots ?? schedule.Timeslots,
+            Uid: schedule.uid ?? schedule.Uid,
+            Note: schedule.note ?? schedule.Note,
           })) || [];
       }
     } catch (error) {

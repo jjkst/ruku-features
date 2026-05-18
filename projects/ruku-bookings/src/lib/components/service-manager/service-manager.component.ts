@@ -107,7 +107,7 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
       const addUpdateService: Service = {
         Id: this.formId,
         Title: formValue.title,
-        FileName: this.fileName || 'default-image.jpg',
+        FileName: this.fileName || 'ruku-logo.png',
         Description: formValue.description,
         Features: formValue.features,
         PricingPlans: (formValue.pricingPlans ?? []).map((pp: any) => ({
@@ -218,17 +218,17 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
       const response = await this.productService.getPublicServices();
       if (response.status === 200 && Array.isArray(response.body)) {
         this.services =
-          response.body.map((service) => ({
-            Id: service.Id,
-            Title: service.Title,
-            FileName: service.FileName,
-            Description: service.Description,
-            Features: service.Features ?? [],
-            PricingPlans: (service.PricingPlans ?? []).map((pp: any) => ({
-              Name: pp.Name,
-              InitialSetupFee: pp.InitialSetupFee,
-              MonthlySubscription: pp.MonthlySubscription,
-              Features: pp.Features ?? []
+          response.body.map((service: any) => ({
+            Id: service.id ?? service.Id,
+            Title: service.title ?? service.Title,
+            FileName: service.fileName ?? service.FileName,
+            Description: service.description ?? service.Description,
+            Features: service.features ?? service.Features ?? [],
+            PricingPlans: (service.pricingPlans ?? service.PricingPlans ?? []).map((pp: any) => ({
+              Name: pp.name ?? pp.Name,
+              InitialSetupFee: pp.initialSetupFee ?? pp.InitialSetupFee,
+              MonthlySubscription: pp.monthlySubscription ?? pp.MonthlySubscription,
+              Features: pp.features ?? pp.Features ?? []
             }))
           })) || [];
       }

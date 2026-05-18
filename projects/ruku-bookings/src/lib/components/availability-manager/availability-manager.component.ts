@@ -191,12 +191,12 @@ export class AvailabilityManagerComponent extends BaseComponent implements OnIni
       const response = await this.availabilityService.getAvailabilities();
       if (response.status === 200 && Array.isArray(response.body)) {
         this.availabilities =
-          response.body.map((availability) => ({
-            Id: availability.Id,
-            StartDate: availability.StartDate,
-            EndDate: availability.EndDate,
-            Timeslots: availability.Timeslots,
-            Services: availability.Services,
+          response.body.map((availability: any) => ({
+            Id: availability.id ?? availability.Id,
+            StartDate: availability.startDate ?? availability.StartDate,
+            EndDate: availability.endDate ?? availability.EndDate,
+            Timeslots: availability.timeslots ?? availability.Timeslots,
+            Services: availability.services ?? availability.Services,
           })) || [];
       }
     } catch (error) {
@@ -285,11 +285,11 @@ export class AvailabilityManagerComponent extends BaseComponent implements OnIni
       const response = await this.productService.getServices();
       if (response.status === 200 && Array.isArray(response.body)) {
         this.allServices =
-          response.body.map((service) => ({
-            Id: service.Id,
-            Title: service.Title,
-            Description: service.Description,
-            FileName: service.FileName,
+          response.body.map((service: any) => ({
+            Id: service.id ?? service.Id,
+            Title: service.title ?? service.Title,
+            Description: service.description ?? service.Description,
+            FileName: service.fileName ?? service.FileName,
           })) || [];
       }
     } catch (error) {
