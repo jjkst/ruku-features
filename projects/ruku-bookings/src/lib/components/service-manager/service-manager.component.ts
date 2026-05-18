@@ -110,7 +110,12 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
         FileName: this.fileName || 'default-image.jpg',
         Description: formValue.description,
         Features: formValue.features,
-        PricingPlans: formValue.pricingPlans
+        PricingPlans: (formValue.pricingPlans ?? []).map((pp: any) => ({
+          Name: pp.name,
+          InitialSetupFee: pp.initialSetupFee,
+          MonthlySubscription: pp.monthlySubscription,
+          Features: pp.features ?? []
+        }))
       };
 
       if (!this.productService.validateServiceData(addUpdateService)) {
@@ -218,12 +223,12 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
             Title: service.Title,
             FileName: service.FileName,
             Description: service.Description,
-            Features: service.Features,
-            PricingPlans: service.PricingPlans.map((pp: any) => ({
+            Features: service.Features ?? [],
+            PricingPlans: (service.PricingPlans ?? []).map((pp: any) => ({
               Name: pp.Name,
               InitialSetupFee: pp.InitialSetupFee,
               MonthlySubscription: pp.MonthlySubscription,
-              Features: pp.Features
+              Features: pp.Features ?? []
             }))
           })) || [];
       }

@@ -51,8 +51,9 @@
         </mat-form-field>
 
         <button mat-raised-button color="primary" type="submit" [disabled]="loading">
-          <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+          <mat-spinner *ngIf="loading" diameter="20" class="btn-spinner"></mat-spinner>
           <span *ngIf="!loading">Sign In</span>
+          <span *ngIf="loading" class="visually-hidden">Signing in</span>
         </button>
       </form>
 
@@ -79,8 +80,9 @@
         </mat-form-field>
 
         <button mat-raised-button color="primary" type="submit" [disabled]="loading">
-          <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+          <mat-spinner *ngIf="loading" diameter="20" class="btn-spinner"></mat-spinner>
           <span *ngIf="!loading">Create Account</span>
+          <span *ngIf="loading" class="visually-hidden">Creating account</span>
         </button>
       </form>
 
