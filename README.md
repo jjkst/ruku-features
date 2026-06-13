@@ -68,13 +68,17 @@ Both are added under `projects/` and registered in `angular.json` automatically.
 
 ## Consuming from Other Apps (e.g., jk-portfolio)
 
-1. Build the library: `npm run build` (outputs to `dist/ruku-bookings/`)
-2. In the consuming app, reference it via `package.json`:
+1. In the consuming app, reference the library via `package.json`:
    ```json
    "ruku-bookings": "file:lib/ruku-bookings"
    ```
-3. Create a junction/symlink: `lib/ruku-bookings` -> `path/to/ruku-features/dist/ruku-bookings`
-4. Import in code: `import { HeaderComponent, AuthService } from 'ruku-bookings';`
+2. Run the setup script from the consuming app — it builds the library and copies it to `lib/ruku-bookings`:
+   ```bash
+   cd ../jk-portfolio
+   npm run setup       # first time: builds lib + npm ci
+   npm run setup:lib   # subsequent updates: rebuild and copy only
+   ```
+3. Import in code: `import { HeaderComponent, AuthService } from 'ruku-bookings';`
 
 ## Connected Backend
 
