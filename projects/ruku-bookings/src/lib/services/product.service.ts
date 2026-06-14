@@ -14,7 +14,7 @@ export class ProductService extends BaseService {
   }
 
   async getPublicServices(): Promise<HttpResponse<any[]>> {
-    return await this.get<Service[]>('/publicservices');
+    return await this.get<Service[]>(this.endpoint);
   }
 
   async getServicesById(id: number): Promise<HttpResponse<any>> {
@@ -22,7 +22,7 @@ export class ProductService extends BaseService {
   }
 
   async getPublicServicesById(id: number): Promise<HttpResponse<any>> {
-    return await this.get<Service>(`/publicservices/${id}`);
+    return await this.get<Service>(`${this.endpoint}/${id}`);
   }
 
   // async getMockServices(): Promise<HttpResponse<Service[]>> {
