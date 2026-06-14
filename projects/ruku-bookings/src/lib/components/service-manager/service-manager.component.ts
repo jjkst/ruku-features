@@ -63,7 +63,7 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
     this.serviceForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
-      fileName: [''],
+      fileName: [{ value: '', disabled: true }],
       features: this.fb.array([]),
       pricingPlans: this.fb.array([])
     });
@@ -103,7 +103,7 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
     if (this.serviceForm.valid) {
       this.loading = true;
 
-      let imageFileName = this.fileName || 'ruku-logo.png';
+      let imageFileName = this.serviceForm.get('fileName')?.value || 'ruku-logo.png';
 
       if (this.file) {
         try {
@@ -208,6 +208,7 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
       }
 
       this.fileName = this.file.name;
+      this.serviceForm.patchValue({ fileName: this.file.name });
       this.fileUploadError = null;
     }
   }
@@ -316,12 +317,12 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
 
   getServiceImageUrl(service: Service): string {
     const name = service.FileName;
-    if (!name) return 'assets/ruku-logo.png';
+    if (!name) return 'ruku-logo.png';
     // Uploaded files are named {timestamp}_{random}.ext — serve via API
     if (/^\d+_/.test(name)) {
       return `/api/uploadimage/files/${name}`;
     }
-    return `assets/${name}`;
+    return name;
   }
 
   getServiceTitle(service: Service): string {

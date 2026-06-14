@@ -47,12 +47,11 @@
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Choose a image to represent your service</mat-label>
+            <mat-label>Choose an image to represent your service</mat-label>
             <input
               matInput
-              [value]="fileName"
+              formControlName="fileName"
               placeholder="No file chosen"
-              readonly
               (click)="fileInput.click()"
             />
             <input
