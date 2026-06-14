@@ -103,11 +103,31 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
     if (this.serviceForm.valid) {
       this.loading = true;
 
+      let imageFileName = this.fileName || 'ruku-logo.png';
+
+      if (this.file) {
+        try {
+          const uploadResponse = await this.imguploadService.uploadImage(this.file);
+          if (uploadResponse.status === 200 && uploadResponse.body?.fileName) {
+            imageFileName = uploadResponse.body.fileName;
+            this.fileUploadError = null;
+          } else {
+            this.showToast('Failed to upload file. Please try again.', 'error');
+            this.loading = false;
+            return;
+          }
+        } catch (error) {
+          this.showToast('Failed to upload file. Please try again.', 'error');
+          this.loading = false;
+          return;
+        }
+      }
+
       const formValue = this.serviceForm.value;
       const addUpdateService: Service = {
         Id: this.formId,
         Title: formValue.title,
-        FileName: this.fileName || 'ruku-logo.png',
+        FileName: imageFileName,
         Description: formValue.description,
         Features: formValue.features,
         PricingPlans: (formValue.pricingPlans ?? []).map((pp: any) => ({
@@ -126,7 +146,7 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
         this.loading = false;
         return;
       }
-      console.log(addUpdateService);
+
       try {
         const response =
           this.formId === 0
@@ -138,9 +158,6 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
 
         if (response.status === 200 || response.status === 201) {
           this.showToast('Service Added/Updated Successfully!', 'success');
-          if (this.file) {
-            await this.uploadFile();
-          }
           this.resetForm();
           this.loadServices();
         } else if (response.status === 409) {
@@ -158,24 +175,6 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
     } else {
       this.serviceForm.markAllAsTouched();
       this.showToast('Please fill in all required fields correctly.', 'error');
-    }
-  }
-
-  private async uploadFile(): Promise<void> {
-    if (!this.file) {
-      this.fileUploadError = 'Please select a valid file.';
-      return;
-    }
-
-    try {
-      await this.imguploadService.uploadImage(this.file);
-      console.log('File uploaded successfully');
-      this.fileUploadError = null;
-      this.showToast('File uploaded successfully!', 'success');
-    } catch (error) {
-      console.error('File upload failed:', error);
-      this.fileUploadError = 'Failed to upload file. Please try again.';
-      this.showToast('Failed to upload file. Please try again.', 'error');
     }
   }
 
@@ -316,7 +315,13 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
   }
 
   getServiceImageUrl(service: Service): string {
-    return `assets/${service.FileName}`;
+    const name = service.FileName;
+    if (!name) return 'assets/ruku-logo.png';
+    // Uploaded files are named {timestamp}_{random}.ext — serve via API
+    if (/^\d+_/.test(name)) {
+      return `/api/uploadimage/files/${name}`;
+    }
+    return `assets/${name}`;
   }
 
   getServiceTitle(service: Service): string {
