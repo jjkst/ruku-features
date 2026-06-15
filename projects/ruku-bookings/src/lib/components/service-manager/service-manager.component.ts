@@ -63,7 +63,7 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
     this.serviceForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
-      fileName: [{ value: '', disabled: true }],
+      fileName: [''],
       features: this.fb.array([]),
       pricingPlans: this.fb.array([])
     });
