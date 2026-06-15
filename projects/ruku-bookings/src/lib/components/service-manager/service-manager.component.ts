@@ -112,14 +112,10 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
             imageFileName = uploadResponse.body.fileName;
             this.fileUploadError = null;
           } else {
-            this.showToast('Failed to upload file. Please try again.', 'error');
-            this.loading = false;
-            return;
+            this.showToast('Image upload failed — service will be saved without image.', 'warning');
           }
         } catch (error) {
-          this.showToast('Failed to upload file. Please try again.', 'error');
-          this.loading = false;
-          return;
+          this.showToast('Image upload failed — service will be saved without image.', 'warning');
         }
       }
 

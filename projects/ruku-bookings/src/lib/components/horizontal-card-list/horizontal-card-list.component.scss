@@ -181,4 +181,13 @@
     width: 32px;
     height: 32px;
   }
+
+  .card-actions {
+    flex-direction: column;
+
+    .action-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 }
