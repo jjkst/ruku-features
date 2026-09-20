@@ -67,7 +67,14 @@ export class ServiceManagerComponent extends BaseComponent implements OnInit, On
       features: this.fb.array([]),
       pricingPlans: this.fb.array([])
     });
-    this.loadServices();
+    // These endpoints are [Authorize]'d and the bearer token lives in localStorage,
+    // which SSR has no access to — authInterceptor therefore sends the server-side
+    // request with no Authorization header and the API answers 401. The call can
+    // never succeed during server render, and its 401 also trips the interceptor's
+    // logout path. Defer the load to hydration, exactly as authGuard already does.
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadServices();
+    }
   }
 
   get features(): FormArray {
