@@ -299,10 +299,18 @@ export class ScheduleManagerComponent extends BaseComponent implements OnInit, O
   }
 
   editSchedule(schedule: Schedule): void {
+    // Match on Id, not Uid: Uid identifies the *user*, so every schedule of
+    // theirs shares it and this would always resolve to their first schedule.
     const index = this.scheduledAppointments.findIndex(
-      (s) => s.Uid === schedule.Uid
+      (s) => s.Id != null && s.Id === schedule.Id
     );
-    this.formId = index >= 0 ? index : null;
+    if (index < 0) {
+      // Leaving formId null here would silently drop into "add" mode and
+      // create a duplicate on submit, so refuse to enter edit mode instead.
+      this.showToast('Could not identify that schedule for editing.', 'error');
+      return;
+    }
+    this.formId = index;
     const selectedServices = this.appointmentForm.get('Services')?.value || [];
     this.loadTimeSlots(schedule.SelectedDate, selectedServices);
     this.appointmentForm.patchValue({
