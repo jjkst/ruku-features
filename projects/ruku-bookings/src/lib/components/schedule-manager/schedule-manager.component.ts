@@ -279,7 +279,7 @@ export class ScheduleManagerComponent extends BaseComponent implements OnInit, O
           return;
         }
         const response = await this.scheduleService.updateSchedule(
-          existingSchedule.Uid,
+          existingSchedule.Id ?? 0,
           scheduleData
         );
         if (response.status === 200) {
@@ -331,7 +331,7 @@ export class ScheduleManagerComponent extends BaseComponent implements OnInit, O
       try {
         this.loading = true;
         const response = await this.scheduleService.deleteSchedule(
-          schedule.Uid
+          schedule.Id ?? 0
         );
         if (response.status === 200 || response.status === 204) {
           this.showToast('Schedule deleted successfully!', 'success');
